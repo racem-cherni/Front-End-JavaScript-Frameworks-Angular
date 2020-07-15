@@ -21,7 +21,9 @@ export class DishdetailComponent implements OnInit {
 
   ngOnInit() {
     let vare = this.route.snapshot.params['num'];
-    this.dish = this.dishservice.getDish(vare);
+   // this.dish = this.dishservice.getDish(vare);  without promise
+   this.dishservice.getDish(vare).then(dish => this.dish = dish);
+
 
   }
 
