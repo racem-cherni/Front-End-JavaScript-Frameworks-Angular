@@ -19,8 +19,11 @@ dishes: Dish[];
 
   ngOnInit() {
   //  this.dishes = this.dishService.getDishes();   // without promise
-  this.dishService.getDishes()
-  .then(dishes => this.dishes = dishes);
+  /*this.dishService.getDishes()
+  .then(dishes => this.dishes = dishes);*/ // with promise
+
+  this.dishService.getDishes().subscribe(dishes => this.dishes = dishes); // with observable
+
   }
 
   onSelect(dish: Dish) {
