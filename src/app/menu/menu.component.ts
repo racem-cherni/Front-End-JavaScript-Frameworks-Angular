@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , Inject } from '@angular/core';
 import { Dish } from '../shared/dish';
 
-//import { DISHES } from '../shared/dishes';
 import { DishService } from '../services/dish.service';
 
 @Component({
@@ -13,9 +12,13 @@ export class MenuComponent implements OnInit {
 //  dishes: Dish[] = DISHES;
 dishes: Dish[];
 
-  selectedDish: Dish;
 
-  constructor(private dishService: DishService) { }
+  constructor(private dishService: DishService,
+     @Inject('BaseURL') public BaseURL) { } // when you have a service, you are injecting
+                                                                                        //  services like this here,
+                                                                                        // but when you have a value,
+                                                                                          // then you inject the value
+                                                                                         // by using the "@Inject" decorator.
 
   ngOnInit() {
   //  this.dishes = this.dishService.getDishes();   // without promise
@@ -26,7 +29,4 @@ dishes: Dish[];
 
   }
 
-  onSelect(dish: Dish) {
-    this.selectedDish = dish;
-  }
 }
