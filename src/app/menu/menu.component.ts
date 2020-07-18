@@ -11,6 +11,7 @@ import { DishService } from '../services/dish.service';
 export class MenuComponent implements OnInit {
 //  dishes: Dish[] = DISHES;
 dishes: Dish[];
+errMess: string;
 
 
   constructor(private dishService: DishService,
@@ -21,12 +22,10 @@ dishes: Dish[];
                                                                                          // by using the "@Inject" decorator.
 
   ngOnInit() {
-  //  this.dishes = this.dishService.getDishes();   // without promise
-  /*this.dishService.getDishes()
-  .then(dishes => this.dishes = dishes);*/ // with promise
 
-  this.dishService.getDishes().subscribe(dishes => this.dishes = dishes); // with observable
-
+  this.dishService.getDishes()
+  .subscribe(dishes => this.dishes = dishes,
+    errmess => this.errMess = <any>errmess);
   }
 
 }
