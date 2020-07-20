@@ -1,26 +1,37 @@
 import { Component, OnInit , ViewChild  } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
-import { flyInOut } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';
+import { flyInOut, expand , visibility } from '../animations/app.animation';
+import { baseURL } from '../shared/baseurl';
+
 
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
-   // tslint:disable-next-line: use-host-property-decorator
-   host: {
+  // tslint:disable-next-line: use-host-property-decorator
+  host: {
     '[@flyInOut]': 'true',
     'style': 'display: block;'
     },
-    animations: [
-      flyInOut()
-    ]
+  animations: [
+    flyInOut(),
+    expand(),
+    visibility(),
+  ]
 })
 export class ContactComponent implements OnInit {
 
   feedbackForm: FormGroup;
   feedback: Feedback;
+  errMess: string;
+  feedbackcopy: Feedback = null;
+  showSpinner = false;
+  showFeedbackForm = true;
+  showFeedback = false;
+
   contactType = ContactType;
   @ViewChild('fform') feedbackFormDirective;
 
@@ -52,7 +63,7 @@ export class ContactComponent implements OnInit {
     },
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder , private feedbackservice: FeedbackService) {
     this.createForm();
   }
 
@@ -99,6 +110,14 @@ export class ContactComponent implements OnInit {
   onSubmit() {
     this.feedback = this.feedbackForm.value;   // data model = form model
     console.log(this.feedback);
+    this.showFeedbackForm = false ;
+    this.feedbackservice.submitFeedback(this.feedback)
+    .subscribe(feedback => {
+      this.feedbackcopy = feedback;
+      this.feedback = null;
+      setTimeout(() => {
+        this.feedbackcopy = null; this.showFeedbackForm = true; }, 5000);     },
+        error => console.log(error.status, error.message));
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
